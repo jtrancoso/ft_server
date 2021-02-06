@@ -13,8 +13,9 @@ RUN apt-get install wget && \
 	mv wp-cli.phar /usr/local/bin/wp && \
 	wp core download --path=var/www/wordpress --allow-root
 # move things
-COPY srcs/index.html var/www/html/
+COPY srcs/index.html var/www/
 COPY srcs/nginx-wp-conf /etc/nginx/sites-available/
+COPY srcs/create_DB.bash /
 # make links for nginx config
 RUN ln -s /etc/nginx/sites-available/nginx-wp-conf /etc/nginx/sites-enabled/
 # install phpmyadmin
@@ -25,4 +26,7 @@ RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-lang
 	chown -R www-data:www-data /var/www
 # executes services
 CMD service nginx start && \
+	service php7.3-fpm start && \
+	service mysql start && \
+	bash create_DB.bash && \
 	bash
