@@ -16,6 +16,14 @@ RUN apt-get install wget && \
 COPY srcs/index.html var/www/
 COPY srcs/nginx-wp-conf /etc/nginx/sites-available/
 COPY srcs/create_DB.bash /
+COPY srcs/create_wp.bash /
+COPY srcs/wordpress/meme1.png var/www/wordpress/
+COPY srcs/test var/www/test/
+COPY srcs/wordpress/header.jpg /
+COPY srcs/self-signed.conf etc/nginx/snippets/
+COPY srcs/ssl-params.conf etc/nginx/snippets/
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out \
+	/etc/ssl/certs/nginx-selfsigned.crt -subj "/CN=localhost/"
 # make links for nginx config
 RUN ln -s /etc/nginx/sites-available/nginx-wp-conf /etc/nginx/sites-enabled/
 # install phpmyadmin
@@ -29,4 +37,6 @@ CMD service nginx start && \
 	service php7.3-fpm start && \
 	service mysql start && \
 	bash create_DB.bash && \
+	bash create_wp.bash && \
+	mv header.jpg /var/www/wordpress/wp-content/themes/twentyseventeen/assets/images && \
 	bash
