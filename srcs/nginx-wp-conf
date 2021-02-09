@@ -6,7 +6,7 @@ server {
 	root /var/www;
 	server_name localhost;
 
-	autoindex off;
+	autoindex on;
 
 	location / {
 	    index index.html index.php;

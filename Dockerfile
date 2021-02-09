@@ -22,6 +22,8 @@ COPY srcs/test var/www/test/
 COPY srcs/wordpress/header.jpg /
 COPY srcs/self-signed.conf etc/nginx/snippets/
 COPY srcs/ssl-params.conf etc/nginx/snippets/
+COPY srcs/set_index.bash /
+# create ssl
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out \
 	/etc/ssl/certs/nginx-selfsigned.crt -subj "/CN=localhost/"
 # make links for nginx config
